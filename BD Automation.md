@@ -62,7 +62,8 @@ ORDER BY
 
 
 Ended Level Value =
-VAR Levels = {
+VAR Levels =
+{
     (1, 'NewTable'[Level 1]),
     (2, 'NewTable'[Level 2]),
     (3, 'NewTable'[Level 3]),
@@ -74,20 +75,24 @@ VAR Levels = {
 }
 VAR LastLevel =
     MAXX(
-        FILTER(Levels, NOT(ISBLANK([Value]))),
+        FILTER(
+            ADDCOLUMNS(
+                Levels,
+                "@Value", [Value]
+            ),
+            NOT(ISBLANK([@Value]))
+        ),
         [Level]
     )
 RETURN
-LOOKUPVALUE(
-    SWITCH(LastLevel,
-        1, 'NewTable'[Level 1],
-        2, 'NewTable'[Level 2],
-        3, 'NewTable'[Level 3],
-        4, 'NewTable'[Level 4],
-        5, 'NewTable'[Level 5],
-        6, 'NewTable'[Level 6],
-        7, 'NewTable'[Level 7],
-        8, 'NewTable'[Level 8]
-    ),
-    1, 1
+SWITCH(
+    LastLevel,
+    1, 'NewTable'[Level 1],
+    2, 'NewTable'[Level 2],
+    3, 'NewTable'[Level 3],
+    4, 'NewTable'[Level 4],
+    5, 'NewTable'[Level 5],
+    6, 'NewTable'[Level 6],
+    7, 'NewTable'[Level 7],
+    8, 'NewTable'[Level 8]
 )
